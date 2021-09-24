@@ -6,8 +6,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "56959541c7846ff6ad951bdcfd55bf288b774940"
-      url: "https://github.com/lavahasif/flutter_android_ip_plugin.git"
+      resolved-ref: eef75282bd92ddcfd3a49ecde686418f084e94ef
+      url: "https://github.com/lavahasif/android_ip_plug.git"
     source: git
     version: "2.0.1"
   async:
@@ -59,6 +59,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  crypto:
+    dependency: transitive
+    description:
+      name: crypto
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -104,6 +111,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  google_fonts:
+    dependency: "direct main"
+    description:
+      name: google_fonts
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   http:
     dependency: transitive
     description:

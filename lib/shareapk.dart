@@ -9,22 +9,27 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import 'MyProvider.dart';
+import 'provider/MyProvider.dart';
 
 class SharePage extends StatelessWidget {
   SharePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var ip = context.watch<MyProvider>().myip;
+    _ipcontroller.text = "http://$ip:12345";
     return ListView(
       children: [
-        Center(
-          child: QrImage(
-            data: "1234567890",
-            version: QrVersions.auto,
-            size: 200.0,
-          ),
-        ),
+        context.watch<MyProvider>().myip != null
+            ? Center(
+                child: QrImage(
+                  data: "http://$ip:12345",
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
+              )
+            : Container(
+                height: 150, child: Center(child: CircularProgressIndicator())),
         Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -32,18 +37,24 @@ class SharePage extends StatelessWidget {
                 "Scan the QR code to download the app or type the address in other device browser"),
           ),
         ),
-        TextField(
-          readOnly: true,
-          controller: _ipcontroller,
-          decoration: InputDecoration(
-            suffixIcon: IconButton(
-              onPressed: () => _copyaddress(),
-              icon: Icon(Icons.copy, size: 28),
-            ),
-            border: OutlineInputBorder(),
-            hintText: '',
-          ),
-        ),
+        context.watch<MyProvider>().myip != null
+            ? TextField(
+                readOnly: true,
+                controller: _ipcontroller,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  suffixIcon: GestureDetector(
+                    onTap: () => _copyaddress(),
+                    child: Icon(
+                      Icons.copy,
+                      size: 28,
+                      color: MaterialStateColor.resolveWith(getcolor),
+                    ),
+                  ),
+                ),
+              )
+            : Container(
+                height: 75, child: Center(child: CircularProgressIndicator())),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
@@ -97,6 +108,19 @@ class SharePage extends StatelessWidget {
 
   _copyaddress() {}
   var _ipcontroller = TextEditingController();
+
+  Color getcolor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.selected,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return Colors.blue;
+    }
+    return Colors.black;
+  }
 }
 
 class Instruction extends StatelessWidget {
@@ -119,7 +143,7 @@ class Instruction extends StatelessWidget {
             Component(
                 "2 . ", "Open the device's web browser", "assets/img.png"),
             Component("3 . ", "Input the following address", "assets/img.png",
-                text3: "192.168.43.84"),
+                text3: context.watch<MyProvider>().myip),
             SizedBox(
               height: 125,
             )
@@ -178,17 +202,19 @@ class PageViews extends StatelessWidget {
       },
     );
   }
-
-
 }
+
+late AndroidIp androidIp;
 
 class Share extends StatelessWidget {
   const Share({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    androidIp = new AndroidIp();
+    var listner = androidIp.onConnectivityChanged;
     return ChangeNotifierProvider(
-        create: (_) => MyProvider(), child: PageViews());
+        create: (_) => MyProvider(androidIp), child: PageViews());
   }
 }
 
@@ -224,14 +250,16 @@ class Component extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.black87)),
             )),
-        if (text3.toString().isNotEmpty)
+        if (text3.toString().isNotEmpty && text3 != null)
           Padding(
             padding: const EdgeInsets.only(left: 48.0),
             child: RichText(
               text: TextSpan(
                   children: [
                     TextSpan(
-                        text: text3,
+                        text: context.watch<MyProvider>().myip != null
+                            ? "http://${text3}:12345"
+                            : "",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, color: Colors.cyan)),
                   ],
@@ -240,13 +268,6 @@ class Component extends StatelessWidget {
                       fontWeight: FontWeight.bold, color: Colors.black87)),
             ),
           )
-        // ConstrainedBox(
-        //   constraints: BoxConstraints(maxWidth: double.infinity),
-        //   child: Card(
-        //     child: Image.asset(image),
-        //     elevation: 4,
-        //   ),
-        // )
       ],
     );
   }

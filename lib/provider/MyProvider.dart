@@ -2,6 +2,8 @@ import 'package:android_ip/android_ip.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
+import '../shareapk.dart';
+
 class MyProvider with ChangeNotifier, DiagnosticableTreeMixin {
   var _iptext = "";
   var _pageindex = 0;
@@ -28,7 +30,9 @@ class MyProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  MyProvider();
+  MyProvider(AndroidIp androidIp) {
+    setlistner();
+  }
 
   get iptext => _iptext;
   var _loading = false;
@@ -59,5 +63,61 @@ class MyProvider with ChangeNotifier, DiagnosticableTreeMixin {
     // textcontroller.text = value;
     // print("---------------------->"+textcontroller.text);
     notifyListeners();
+  }
+
+  var _isloadedSucces = false;
+
+  get isloadedSucces => _isloadedSucces;
+
+  set isloadedSucces(value) {
+    _isloadedSucces = value;
+  }
+
+  var _wifiip = null;
+  var _hotspotip = null;
+
+  get wifiip => _wifiip;
+
+  get hotspotip => _hotspotip;
+
+  set hotspotip(value) {
+    _hotspotip = value;
+    notifyListeners();
+  }
+
+  set wifiip(value) {
+    _wifiip = value;
+    notifyListeners();
+  }
+
+  var _myip = null;
+
+  get myip => _myip;
+
+  set myip(value) {
+    _myip = value;
+    print(value);
+    notifyListeners();
+  }
+
+  setlistner() {
+    androidIp.onConnectivityChanged!.listen((event) {
+      AndroidIp.networkresult.then((value) {
+        print(value!.wifi);
+        var wifiips = value.wifi.toString();
+        var hotspotips = value.wifi_tether.toString();
+        if (wifiips != "null") {
+          print('1 ${wifiip}');
+          print(value.wifi);
+          myip = wifiips;
+        } else if (hotspotips != "Null") {
+          myip = hotspotips;
+          print("2 ${hotspotips}");
+        } else {
+          myip = null;
+          print("3 ");
+        }
+      });
+    });
   }
 }
