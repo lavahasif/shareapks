@@ -32,10 +32,19 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-  # This section identifies this Flutter project as a plugin project.
-  # The 'pluginClass' and Android 'package' identifiers should not ordinarily
-  # be modified. They are used by the tooling to maintain consistency when
-  # adding or updating assets for this project.
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - packages/shareapks/asset/index.html
+    - packages/shareapks/asset/files/files.html
+    - packages/shareapks/asset/files/img.png
+
+
   plugin:
     platforms:
       android:
@@ -43,8 +52,8 @@ flutter:
         pluginClass: ShareapksPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
-  assets:
-    - assets/img.png
+
+  #    - assets/img.png
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

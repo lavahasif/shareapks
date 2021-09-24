@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shareapks/util/webserver.dart';
 
 import 'provider/MyProvider.dart';
 
@@ -29,7 +30,15 @@ class SharePage extends StatelessWidget {
                 ),
               )
             : Container(
-                height: 150, child: Center(child: CircularProgressIndicator())),
+                height: 150,
+                child: Center(
+                    child: Column(
+                  children: [
+                    Text(
+                        "Please Turn on your Hotspot \n or Connect to a Wi-Fi"),
+                    CircularProgressIndicator(),
+                  ],
+                ))),
         Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -212,7 +221,8 @@ class Share extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     androidIp = new AndroidIp();
-    var listner = androidIp.onConnectivityChanged;
+    Initial();
+
     return ChangeNotifierProvider(
         create: (_) => MyProvider(androidIp), child: PageViews());
   }

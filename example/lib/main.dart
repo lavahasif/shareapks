@@ -82,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Shareapks.platformVersion;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),

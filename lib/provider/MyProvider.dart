@@ -1,6 +1,7 @@
 import 'package:android_ip/android_ip.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shareapks/util/webserver.dart';
 
 import '../shareapk.dart';
 
@@ -107,17 +108,30 @@ class MyProvider with ChangeNotifier, DiagnosticableTreeMixin {
         var wifiips = value.wifi.toString();
         var hotspotips = value.wifi_tether.toString();
         if (wifiips != "null") {
+          stopserver();
           print('1 ${wifiip}');
           print(value.wifi);
           myip = wifiips;
+          StrartServer(wifiips, 12345);
         } else if (hotspotips != "Null") {
+          stopserver();
           myip = hotspotips;
           print("2 ${hotspotips}");
+          StrartServer(hotspotips, 12345);
         } else {
+          stopserver();
           myip = null;
           print("3 ");
         }
       });
     });
+  }
+
+  void stopserver() {
+    try {
+      if (server != null) server?.close(force: true);
+    } catch (e) {
+      print(e);
+    }
   }
 }
