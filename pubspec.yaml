@@ -1,6 +1,9 @@
 name: shareapks
 description: share apk through webserver and direct
 version: 0.0.1
+repository: https://github.com/lavahasif/shareapks.git
+authors:
+  -lavahasif
 homepage:
 
 environment:
@@ -17,6 +20,8 @@ dependencies:
   http: ^0.13.3
   provider: ^6.0.0
   qr_flutter: ^4.0.0
+  http_parser: ^4.0.0
+  mime: ^1.0.0
 
   android_ip:
     git:
