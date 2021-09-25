@@ -35,16 +35,29 @@ Future<void> StrartServer(String address, int port) async {
     server!.autoCompress = true;
 
     print('Serving at http://${server!.address.host}:${server!.port}');
+  } on SocketException catch (_, e) {
+    var istrue = _.osError!.errorCode == 98;
+    if (istrue) {
+      stopserver();
+      server = null;
+    }
+  }
+}
+
+void stopserver() {
+  try {
+    if (server != null) server?.close(force: true);
   } catch (e) {
     print(e);
   }
 }
+
 r.Router Routers() {
   var app = r.Router();
   app.get('/home', (Request request) async {
     var data = await AndroidIp.getAppName;
     final imageBytes =
-    await rootBundle.loadString("packages/shareapks/asset/index.html");
+        await rootBundle.loadString("packages/shareapks/asset/index.html");
     var datas = imageBytes.replaceAll('app_sha', data!);
 
     File fi = await writeToFile2(datas, "index.html");

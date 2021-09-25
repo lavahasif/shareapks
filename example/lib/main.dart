@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shareapks/shareapk.dart';
+import 'package:shareapks/shareapks.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +74,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var _sharestate = Icons.share;
 
   void _incrementCounter() {
     setState(() {
@@ -85,6 +87,33 @@ class _MyHomePageState extends State<MyHomePage> {
     // Shareapks.platformVersion;
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Container(
+              height: 48,
+              width: 48,
+              child: IconButton(
+                icon: Icon(
+                  _sharestate,
+                  size: 30,
+                ),
+                color: Colors.white,
+                onPressed: () async {
+                  await Shareapks.onShared!.listen((event) {
+                    if (event == "Finished") {
+                      setState(() {
+                        _sharestate = Icons.share;
+                      });
+
+                    } else {
+                      setState(() {
+                        _sharestate = Icons.watch;
+                      });
+
+                    }
+                  });
+                },
+              )),
+        ],
         title: Text(widget.title),
       ),
       body: Padding(
