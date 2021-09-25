@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:android_ip/android_ip.dart';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart' as hp;
 import 'package:mime/mime.dart' as mime;
@@ -41,89 +42,41 @@ Future<void> StrartServer(String address, int port) async {
 r.Router Routers() {
   var app = r.Router();
   app.get('/home', (Request request) async {
-    final imageBytes = await rootBundle.load("packages/shareapks/asset/index.html");
-    File fi = await writeToFile(imageBytes, "index.html");
+    var data = await AndroidIp.getAppName;
+    final imageBytes =
+    await rootBundle.loadString("packages/shareapks/asset/index.html");
+    var datas = imageBytes.replaceAll('app_sha', data!);
+
+    File fi = await writeToFile2(datas, "index.html");
     final headers = await _defaultFileheaderParser(fi);
-    return Response(200, body: fi.openRead(), headers: headers);
   });
   app.get('/', (Request request) async {
-    final imageBytes = await rootBundle.load("packages/shareapks/asset/files/files.html");
-    File fi = await writeToFile(imageBytes, "index.html");
-    final headers = await _defaultFileheaderParser(fi);
-    return Response(200, body: fi.openRead(), headers: headers);
-  });
-  app.get('/bim', (Request request) async {
-    final imageBytes = await rootBundle.load("assets/files/bim.html");
-    File fi = await writeToFile(imageBytes, "bim.html");
-    final headers = await _defaultFileheaderParser(fi);
-    return Response(200, body: fi.openRead(), headers: headers);
-  });
-  app.get('/upload', (Request request) async {
-    final imageBytes = await rootBundle.load("assets/files/upload.html");
-    File fi = await writeToFile(imageBytes, "upload.html");
+    var data = await AndroidIp.getAppName;
+    final imageBytes =
+        await rootBundle.loadString("packages/shareapks/asset/index.html");
+    var datas = imageBytes.replaceAll('app_sha', data!);
+
+    File fi = await writeToFile2(datas, "index.html");
     final headers = await _defaultFileheaderParser(fi);
     return Response(200, body: fi.openRead(), headers: headers);
   });
 
-  app.post('/api/upload', (Request request) async {
-    // second(request);
-
-    return await third(request);
-    // await fst(request);
-  });
-  app.get('/i', (Request request) async {
-    final imageBytes = await rootBundle.load("packages/shareapks/asset/files/img.png");
-    File fi = await writeToFile(imageBytes, "img.png");
-    final headers = await _defaultFileheaderParser(fi);
-    return Response(200, body: fi.openRead(), headers: headers);
-  });
   app.get('/files', (Request request) async {
-    final Directory? docDir = await getExternalStorageDirectory();
-    List<FileSystemEntity> files = docDir!.listSync(recursive: true);
-    String data = "";
-    files.forEach((element) {
-      var s = element.statSync();
-      var filename =
-          element.resolveSymbolicLinksSync().toString().split("/").last;
-      var size = s.size.toDigital;
-      data +=
-      '       <div class="col-md-4 col-sm-4 col-lg-3 col-6 m-2" align="center"> <div class="card" style="width: 18rem;"> <div class="card-body"> <p style="font-size: 13px;color: #1b6d85" class="card-title">${filename}</p> <p class="card-text">${s.modified.toString()}</p> <p class="card-text">${size}</p> <a href="/${filename}" class="btn btn-primary">Download</a> </div> </div> </div>';
-      // data += filename + s.size.toString() + s.type.toString() + "\n";
-    });
-    // return Response.ok('\n $data');
-    final imageBytes = await rootBundle.loadString("packages/shareapks/asset/files/files.html");
-    var datas = imageBytes.replaceAll("<!--        content-->", data);
-
-    File fi = await writeToFile2(datas, "files.html");
+    File fi = await setapp();
     final headers = await _defaultFileheaderParser(fi);
     return Response(200, body: fi.openRead(), headers: headers);
   });
 
-  app.get('/bootstrap', (Request request) async {
-    final imageBytes = await rootBundle.load("assets/files/self.html");
-    File fi = await writeToFile(imageBytes, "self.html");
-    final headers = await _defaultFileheaderParser(fi);
-    return Response(200, body: fi.openRead(), headers: headers);
-  });
-  app.get('/n404', (Request request) async {
-    final imageBytes = await rootBundle.load("assets/files/404.html");
-    File fi = await writeToFile(imageBytes, "404.html");
-    final headers = await _defaultFileheaderParser(fi);
-    return Response(200, body: fi.openRead(), headers: headers);
-  });
-  app.get('/api/set/<name>', (Request request, String name) async {
-    final imageBytes = await rootBundle.load("assets/files/self.html");
-    File fi = await writeToFile(imageBytes, "self.html");
-    final headers = await _defaultFileheaderParser(fi);
-    return Response.ok('$name hello Api ${request.requestedUri}');
-  });
-
-  app.get('/u', (Request request, String user) {
-    return Response(200,
-        // body: test.htmls,
-        headers: {HttpHeaders.contentTypeHeader: 'text/html'});
-  });
   return app;
+}
+
+Future<File> setapp() async {
+  final Directory? docDir = await getExternalStorageDirectory();
+
+  var path = docDir!.path;
+  var pathf = await AndroidIp.shareAPKFile;
+  File fi = File(path + "/app.apk");
+  return fi;
 }
 // r.Router Routers() {
 //   var app = r.Router();
@@ -140,24 +93,12 @@ r.Router Routers() {
 //     return Response(200, body: fi.openRead(), headers: headers);
 //   });
 //
-//   app.get('/files', (Request request) async {
-//     final Directory? docDir = await getExternalStorageDirectory();
-//     List<FileSystemEntity> files = docDir!.listSync(recursive: true);
-//     String data = "";
-//     files.forEach((element) {
-//       var s = element.statSync();
-//       var filename =
-//           element.resolveSymbolicLinksSync().toString().split("/").last;
-//       var size = s.size.toDigital;
-//       data +=
-//           '       <div class="col-md-4 col-sm-4 col-lg-3 col-6 m-2" align="center"> <div class="card" style="width: 18rem;"> <div class="card-body"> <p style="font-size: 13px;color: #1b6d85" class="card-title">${filename}</p> <p class="card-text">${s.modified.toString()}</p> <p class="card-text">${size}</p> <a href="/${filename}" class="btn btn-primary">Download</a> </div> </div> </div>';
-//       // data += filename + s.size.toString() + s.type.toString() + "\n";
-//     });
-//     // return Response.ok('\n $data');
-//     final imageBytes = await rootBundle.loadString("assets/files/files.html");
-//     var datas = imageBytes.replaceAll("<!--        content-->", data);
+//   app.get('/filess', (Request request) async {
+//  var data=await Androidip.
+//     final imageBytes = await rootBundle.loadString("packages/shareapks/asset/index.html");
+//     var datas = imageBytes.replaceAll("$app_sha", data);
 //
-//     File fi = await writeToFile2(datas, "files.html");
+//     File fi = await writeToFile2(datas, "index.html");
 //     final headers = await _defaultFileheaderParser(fi);
 //     return Response(200, body: fi.openRead(), headers: headers);
 //   });
@@ -323,13 +264,14 @@ Response _echoRequest(Request request) =>
 Future<void> initializeDatabase() async {
   // copy db file from Assets folder to Documents folder (only if not already there...)
   // if (FileSystemEntity.typeSync(dbPath) == FileSystemEntityType.notFound) {
-  var datab = await rootBundle.load("assets/img.png");
-  writeToFile(datab, "index.png");
+  var datab = await rootBundle.load("packages/shareapks/asset/img.png");
+  writeToFile(datab, "img.png");
   // var databi = await rootBundle.load("assets/files/bim.html");
   var data = await rootBundle.load("packages/shareapks/asset/index.html");
   // var datas = await rootBundle.load("assets/files/self.html");
   // }
   writeToFile(data, "index.html");
+  setapp();
 }
 
 //=======================

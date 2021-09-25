@@ -1,12 +1,108 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>shelf_static</title>
+    <meta charset="UTF-8">
+    <title>Download Me</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--    <link rel="stylesheet" type="text/css" href="./common.css" />-->
 </head>
 <body>
-<h1>Hello, shelf_static!</h1>
-<img src='img.png' alt='Dart logo' width='152' height='152'>
+
+<style>
+    html, body {
+        height: 100%;
+    }
+
+    .main {
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        background: #007bff;
+    }
+.bg-img{
+width:95%;
+}
+    .main img.bg-img {
+        height: 60%;
+        margin: 0 auto;
+        display: block
+    }
+
+    .main .download-area {
+        text-align: center;
+    }
+
+    .download-area .title {
+        font-weight: 400;
+        font-size: 2.6em;
+        line-height: 2em;
+    }
+
+    .download-area .use_sha {
+        font-size: 1.4em;
+        line-height: 2em;
+        font-weight: 400;
+    }
+
+    .download-area .btnText {
+        width: 80%;
+        height: 2em;
+        line-height: 2em;
+        font-size: 1.8em;
+        margin: .8em auto;
+        background: #f1f5f8;
+        color: #5b5b5b;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        -o-border-radius: 3px;
+    }
+
+    .download-area .btnText {
+        box-shadow: 0 1px 1px 3px rgba(0, 0, 0, 0.1);
+        -webkit-box-shadow: 0 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+
+
+
+
+
+</style>
+<div class="main" id="main">
+    <img class="bg-img" id="bg-img" src="/img.png">
+    <div class="download-area" id="download-area">
+        <div class="title" id="title">app_sha</div>
+        <div class="use_sha" id="use_sha">Faster File Transfer with No Data Usage</div>
+        <a class="btnText" href="/app.apk" id="btnText" style="display: block;">DOWNLOAD</a>
+    </div>
+</div>
+<script type="text/javascript">
+    var module = {}
+    module.bind = function () {
+        var b = document.getElementById('btnText');
+        var t = new Date().getTime();
+        var l = 'http://' + document.location.host + '/app.apk';
+        // alert(l);
+        b.style.display = 'block';
+
+        b.href = l;
+
+        setTimeout(function () {
+            if (b.click)
+                b.click();
+        }, 1500);
+    }
+    module.bind()
+
+
+
+
+
+</script>
 </body>
 </html>
