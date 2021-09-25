@@ -6,6 +6,7 @@ import 'package:android_ip/android_ip.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shareapks/util/webserver.dart';
@@ -52,12 +53,20 @@ class SharePage extends StatelessWidget {
                 controller: _ipcontroller,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  suffixIcon: GestureDetector(
-                    onTap: () => _copyaddress(),
-                    child: Icon(
-                      Icons.copy,
-                      size: 28,
-                      color: MaterialStateColor.resolveWith(getcolor),
+                  suffixIcon: Container(
+                    padding: EdgeInsets.only(right: 4),
+                    height: 36,
+                    width: 36,
+                    child: OutlinedButton(
+                      onPressed: () => _copyaddress(),
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 2),
+                        child: Icon(
+                          Icons.copy,
+                          size: 28,
+                          color: MaterialStateColor.resolveWith(getcolor),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -115,7 +124,12 @@ class SharePage extends StatelessWidget {
     });
   }
 
-  _copyaddress() {}
+  _copyaddress() {
+    var clipboardData = ClipboardData(text: _ipcontroller.text);
+
+    Clipboard.setData(clipboardData);
+  }
+
   var _ipcontroller = TextEditingController();
 
   Color getcolor(Set<MaterialState> states) {
