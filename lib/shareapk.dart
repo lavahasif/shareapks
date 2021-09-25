@@ -54,18 +54,16 @@ class SharePage extends StatelessWidget {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   suffixIcon: Container(
-                    padding: EdgeInsets.only(right: 4),
+                    margin:EdgeInsets.only(right: 2) ,
+
                     height: 36,
                     width: 36,
                     child: OutlinedButton(
                       onPressed: () => _copyaddress(),
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 2),
-                        child: Icon(
-                          Icons.copy,
-                          size: 28,
-                          color: MaterialStateColor.resolveWith(getcolor),
-                        ),
+                      child: Icon(
+                        Icons.copy,
+                        size: 24,
+                        color: MaterialStateColor.resolveWith(getcolor),
                       ),
                     ),
                   ),
