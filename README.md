@@ -149,7 +149,7 @@ class _startState extends State<start> {
 ![Untitled Project](https://user-images.githubusercontent.com/22430922/134873510-585c1bbb-1e76-4679-8bd4-92d0cf6f0251.gif)
 
 #### Problem And solution
-problem 1: After sharing apk file it coud'nt install?
+problem 1: After sharing apk file it coud'nt install? 
 
 solution :You must build apk by flutter build apk --split-per-abi Because debug file coud'nt install on other device
 
