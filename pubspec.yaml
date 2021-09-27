@@ -1,6 +1,6 @@
 name: shareapks
 description: share apk through webserver and direct
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/lavahasif/shareapks.git
 
 homepage:
