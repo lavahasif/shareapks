@@ -1,7 +1,7 @@
 
 import 'dart:async';
 
-import 'package:android_ip/android_ip.dart';
+import 'package:android_util/android_ip.dart';
 import 'package:flutter/services.dart';
 
 class Shareapks {

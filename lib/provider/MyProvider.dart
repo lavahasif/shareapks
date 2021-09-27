@@ -1,4 +1,4 @@
-import 'package:android_ip/android_ip.dart';
+import 'package:android_util/android_ip.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shareapks/util/webserver.dart';

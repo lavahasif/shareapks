@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:android_ip/android_ip.dart';
+import 'package:android_util/android_ip.dart';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart' as hp;
 import 'package:mime/mime.dart' as mime;
